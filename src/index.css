@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Raleway:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .primary-btn {
+    @apply bg-[#FCD0DA] font-semibold px-6 py-3 rounded-full hover:scale-110 hover:shadow-xl duration-300;
+  }
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: white;
+}
+
+/* Font-specific utilities */
+h1,
+.abril {
+  font-family: "Abril Fatface", cursive;
+}
+
+h2,
+.fun-title,
+.luckiest {
+  font-family: 'Luckiest Guy', cursive;
+}
+
+h3,
+.baloo {
+  font-family: "Baloo 2", cursive;
+}
+
+.fredoka {
+  font-family: "Fredoka", sans-serif;
+}
