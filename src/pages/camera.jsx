@@ -5,6 +5,7 @@ import bottomRight from "../assets/images/bottom_right.png";
 import footerWave from "../assets/images/footer.png";
 import Navbar from "../components/navbar";
 
+// Layout photo counts for different layouts
 const layoutPhotoCounts = {
     A: 4,
     B: 3,
