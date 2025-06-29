@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import defaultAvatar from "../assets/images/default-avatar.png";
 import logo from "../assets/images/logo.png";
 
+// Navbar component
 const Navbar = () => {
     const [user, setUser] = useState(null);
     const [profileImage, setProfileImage] = useState(defaultAvatar);
