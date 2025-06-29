@@ -3,6 +3,8 @@ import collage from "../assets/images/description.png";
 import footerWave from "../assets/images/footer.png";
 import Navbar from "../components/navbar";
 
+// Description page component
+// This page introduces users to PixieBooth and guides them to the layout page
 const Description = () => {
     const navigate = useNavigate();
     return (
