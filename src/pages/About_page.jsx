@@ -1,8 +1,9 @@
 import aboutFlower from "../assets/images/about_flower.png"; // Combined flower + grid
 import aboutPhoto from "../assets/images/about_image.png"; // Combined photo + sparkles + frame
 import footerWave from "../assets/images/footer.png";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/navbar";
 
+// About page component
 const About = () => {
     return (
         <>
