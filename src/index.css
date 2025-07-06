@@ -39,3 +39,32 @@ h3,
 .fredoka {
   font-family: "Fredoka", sans-serif;
 }
+
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+
+  #printable-strip,
+  #printable-strip * {
+    visibility: visible !important;
+  }
+
+  #printable-strip {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 auto;
+    width: fit-content !important;
+    height: auto !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  @page {
+    margin: 0;
+    size: portrait;
+  }
+}

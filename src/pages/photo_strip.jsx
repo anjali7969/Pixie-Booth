@@ -1,11 +1,21 @@
+import { saveAs } from "file-saver";
+import gifshot from "gifshot";
+import html2canvas from "html2canvas";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
 import footerWave from "../assets/images/footer.png";
 import rightSticker from "../assets/images/layout_side.png";
 import leftSticker from "../assets/images/left_star.png";
 
-// ✅ import your girlypop sticker
 import girlypopSticker from "../assets/stickers/1sticker.png";
+import girlypop from "../assets/stickers/2sticker.png";
+import cuteSticker from "../assets/stickers/Cute.png";
+import birthdaySticker from "../assets/stickers/happy_birthday.png";
+import jellycatSticker from "../assets/stickers/Jellycat.png";
+import shinchanSticker from "../assets/stickers/Shinchan.png";
+import valentineSticker from "../assets/stickers/valentine.png";
+
 
 import Navbar from "../components/navbar";
 
@@ -29,7 +39,7 @@ const frameColorHexMap = {
 
 const stickers = [
     "No Sticker", "Girlypop", "Cute", "Jellycat",
-    "Shin chan", "Miffy", "Valentine's"
+    "Shin chan", "Birthday", "Valentine's"
 ];
 
 const PhotoStrip = () => {
@@ -47,8 +57,9 @@ const PhotoStrip = () => {
         }
     }, [layout, photos]);
 
-    /** === Strip content === */
     const renderLayoutStrip = () => {
+        const photoBoxClass = "w-[160px] h-[110px] mx-auto overflow-hidden flex items-center justify-center";
+
         switch (String(layout)) {
             case "A":
             case "B":
@@ -58,113 +69,628 @@ const PhotoStrip = () => {
                         {photos.map((photo, idx) => (
                             <div
                                 key={idx}
-                                className="w-[170px] h-[110px] overflow-hidden mx-auto"
+                                style={{
+                                    width: '147px',
+                                    height: '110px',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    overflow: 'hidden',
+
+                                    margin: '0 auto',
+                                    backgroundColor: '#fff',
+                                }}
                             >
-                                <img src={photo} alt={`Photo ${idx + 1}`} className="w-full h-full object-cover" />
+                                <img
+                                    src={photo}
+                                    alt={`Photo ${idx + 1}`}
+                                    style={{
+                                        width: 'auto',
+                                        height: '100%',
+                                        objectFit: 'contain',
+                                    }}
+                                />
                             </div>
+
+
                         ))}
                     </div>
                 );
+
             case "D":
                 return (
                     <div className="grid grid-cols-2 grid-rows-3 gap-4">
                         {photos.map((photo, idx) => (
-                            <div
-                                key={idx}
-                                className="w-[130px] h-[110px] overflow-hidden"
-                            >
-                                <img src={photo} alt={`Photo ${idx + 1}`} className="w-full h-full object-cover" />
+                            <div key={idx} className="w-[140px] h-[110px] overflow-hidden flex items-center justify-center">
+                                <img
+                                    src={photo}
+                                    alt={`Photo ${idx + 1}`}
+                                    className="object-cover w-full h-full"
+                                />
                             </div>
                         ))}
                     </div>
                 );
+
             default:
-                return (
-                    <p className="text-sm text-red-500">Unknown layout</p>
-                );
+                return <p className="text-sm text-red-500">Unknown layout</p>;
         }
     };
 
-    // ✅ Timestamp text color
+    const saveStripToGallery = async (imageDataUrl) => {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            console.warn("🚫 No auth token found");
+            return;
+        }
+
+        try {
+            const res = await fetch("http://localhost:5000/api/gallery/save", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`, // ✅ format must be correct
+                },
+                body: JSON.stringify({ imageUrl: imageDataUrl }),
+            });
+
+            if (!res.ok) {
+                const errText = await res.text();
+                console.error("❌ Server error:", errText);
+            } else {
+                console.log("✅ Strip image saved to gallery");
+            }
+        } catch (error) {
+            console.error("❌ Failed to save strip image:", error);
+        }
+    };
+
+
+
+
+
     const timestampTextColor = ["White", "Yellow", "Purple"].includes(selectedFrameColor)
         ? "text-black" : "text-white";
 
-    /** === Stickers per layout === */
     const renderStickerPerLayout = () => {
-        if (selectedSticker !== "Girlypop") return null;
+        // Girlypop sticker logic
+        if (selectedSticker === "Girlypop") {
+            switch (String(layout)) {
+                case "A":
+                    return (
+                        <img
+                            src={girlypopSticker}
+                            alt="Girlypop Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-10px",
+                                left: "0",
+                                width: "100%",
+                                height: "105%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "B":
+                    return (
+                        <img
+                            src={girlypopSticker}
+                            alt="Girlypop Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-70px",
+                                left: "0",
+                                width: "100%",
+                                height: "110%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "C":
+                    return (
+                        <img
+                            src={girlypopSticker}
+                            alt="Girlypop Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "0px",
+                                left: "0",
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "D":
+                    return (
+                        <img
+                            src={girlypop}
+                            alt="Girlypop Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-5px",
+                                left: "0px",
+                                width: "110%",
+                                height: "110%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                default:
+                    return null;
+            }
+        }
 
-        switch (String(layout)) {
-            case "A":
-                return (
-                    <img
-                        src={girlypopSticker}
-                        alt="Girlypop Sticker"
-                        className="absolute pointer-events-none select-none"
-                        style={{
-                            top: "-10px",
-                            left: "0",
-                            width: "100%",
-                            height: "105%",
-                            objectFit: "cover"
-                        }}
-                    />
-                );
-            case "B":
-                return (
-                    <img
-                        src={girlypopSticker}
-                        alt="Girlypop Sticker"
-                        className="absolute pointer-events-none select-none"
-                        style={{
-                            top: "-70px",
-                            left: "0",
-                            width: "100%",
-                            height: "105%",
-                            objectFit: "cover"
-                        }}
-                    />
-                );
-            case "C":
-                return (
-                    <img
-                        src={girlypopSticker}
-                        alt="Girlypop Sticker"
-                        className="absolute pointer-events-none select-none"
-                        style={{
-                            top: "10px",
-                            left: "0",
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover"
-                        }}
-                    />
-                );
-            case "D":
-                return (
-                    <img
-                        src={girlypopSticker}
-                        alt="Girlypop Sticker"
-                        className="absolute pointer-events-none select-none"
-                        style={{
-                            top: "-20px",
-                            left: "0",
-                            width: "100%",
-                            height: "115%",
-                            objectFit: "cover"
-                        }}
-                    />
-                );
-            default:
-                return null;
+        // Cute sticker logic
+        if (selectedSticker === "Cute") {
+            switch (String(layout)) {
+                case "A":
+                    return (
+                        <img
+                            src={cuteSticker}
+                            alt="Cute Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-10px",
+                                left: "0",
+                                width: "100%",
+                                height: "105%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "B":
+                    return (
+                        <img
+                            src={cuteSticker}
+                            alt="Cute Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-60px",
+                                left: "0",
+                                width: "100%",
+                                height: "107%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "C":
+                    return (
+                        <img
+                            src={cuteSticker}
+                            alt="Cute Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "0px",
+                                left: "0",
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "D":
+                    return (
+                        <img
+                            src={cuteSticker}
+                            alt="Cute Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-5px",
+                                left: "0px",
+                                width: "110%",
+                                height: "110%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                default:
+                    return null;
+            }
+        }
+
+        // Jellycat sticker logic
+        if (selectedSticker === "Jellycat") {
+            switch (String(layout)) {
+                case "A":
+                    return (
+                        <img
+                            src={jellycatSticker}
+                            alt="Jellycat Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-10px",
+                                left: "0",
+                                width: "100%",
+                                height: "105%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "B":
+                    return (
+                        <img
+                            src={jellycatSticker}
+                            alt="Jellycat Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-70px",
+                                left: "0",
+                                width: "100%",
+                                height: "117%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "C":
+                    return (
+                        <img
+                            src={jellycatSticker}
+                            alt="Jellycat Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "0px",
+                                left: "0",
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "D":
+                    return (
+                        <img
+                            src={jellycatSticker}
+                            alt="Jellycat Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-5px",
+                                left: "0px",
+                                width: "110%",
+                                height: "110%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                default:
+                    return null;
+            }
+        }
+
+        // Shin chan sticker logic
+        if (selectedSticker === "Shin chan") {
+            switch (String(layout)) {
+                case "A":
+                    return (
+                        <img
+                            src={shinchanSticker}
+                            alt="Shin chan Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-10px",
+                                left: "0",
+                                width: "100%",
+                                height: "105%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "B":
+                    return (
+                        <img
+                            src={shinchanSticker}
+                            alt="Shin chan Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-70px",
+                                left: "0",
+                                width: "100%",
+                                height: "117%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "C":
+                    return (
+                        <img
+                            src={shinchanSticker}
+                            alt="Shin chan Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "0px",
+                                left: "0",
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "D":
+                    return (
+                        <img
+                            src={shinchanSticker}
+                            alt="Shin chan Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-5px",
+                                left: "0px",
+                                width: "110%",
+                                height: "110%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                default:
+                    return null;
+            }
+        }
+
+        // Birthday sticker logic
+        if (selectedSticker === "Birthday") {
+            switch (String(layout)) {
+                case "A":
+                    return (
+                        <img
+                            src={birthdaySticker}
+                            alt="Birthday Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-10px",
+                                left: "0",
+                                width: "100%",
+                                height: "105%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "B":
+                    return (
+                        <img
+                            src={birthdaySticker}
+                            alt="Birthday Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-70px",
+                                left: "0",
+                                width: "100%",
+                                height: "117%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "C":
+                    return (
+                        <img
+                            src={birthdaySticker}
+                            alt="Birthday Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "0px",
+                                left: "0",
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "D":
+                    return (
+                        <img
+                            src={birthdaySticker}
+                            alt="Birthday Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-5px",
+                                left: "0px",
+                                width: "110%",
+                                height: "110%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                default:
+                    return null;
+            }
+        }
+
+        // Valentine's sticker logic
+        if (selectedSticker === "Valentine's") {
+            switch (String(layout)) {
+                case "A":
+                    return (
+                        <img
+                            src={valentineSticker}
+                            alt="Valentine's Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-10px",
+                                left: "0",
+                                width: "100%",
+                                height: "105%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "B":
+                    return (
+                        <img
+                            src={valentineSticker}
+                            alt="Valentine's Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-70px",
+                                left: "0",
+                                width: "100%",
+                                height: "105%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "C":
+                    return (
+                        <img
+                            src={valentineSticker}
+                            alt="Valentine's Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "0px",
+                                left: "0",
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                case "D":
+                    return (
+                        <img
+                            src={valentineSticker}
+                            alt="Valentine's Sticker"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                                top: "-5px",
+                                left: "0px",
+                                width: "110%",
+                                height: "110%",
+                                objectFit: "cover"
+                            }}
+                        />
+                    );
+                default:
+                    return null;
+            }
+        }
+
+
+        return null;
+    };
+
+
+
+    const handleDownloadStrip = async () => {
+        const element = document.getElementById("photo-strip-canvas");
+        if (!element) {
+            alert("Photo strip not found!");
+            return;
+        }
+
+        try {
+            // Get actual pixel dimensions of the element
+            const rect = element.getBoundingClientRect();
+
+
+            const canvas = await html2canvas(element, {
+                useCORS: true,
+                backgroundColor: null,
+
+                scale: 3, // Optional: for higher resolution
+            });
+
+
+            canvas.toBlob((blob) => {
+                if (blob) {
+                    // ⬇️ Save to local
+                    saveAs(blob, `PixieBooth-Strip-${layout}.png`);
+
+                    // ⬇️ Also convert blob to DataURL and save to gallery
+                    const reader = new FileReader();
+                    reader.onloadend = async () => {
+                        const base64data = reader.result;
+                        await saveStripToGallery(base64data); // ✅ Send to backend
+                    };
+                    reader.readAsDataURL(blob);
+                }
+            });
+
+        } catch (err) {
+            console.error("❌ Failed to download:", err);
+            alert("Something went wrong while downloading.");
         }
     };
+
+    const handleDownloadGIF = async () => {
+        const frames = [];
+
+        for (let i = 0; i < photos.length; i++) {
+            const tempDiv = document.createElement("div");
+            tempDiv.style.position = "fixed";
+            tempDiv.style.top = "-9999px"; // Hide offscreen
+            document.body.appendChild(tempDiv);
+
+            tempDiv.innerHTML = `
+            <div id="temp-strip" style="
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 8px 4px 6px;
+                width: 180px;
+                border: 2px solid ${frameColorHexMap[selectedFrameColor]};
+                background-color: ${frameColorHexMap[selectedFrameColor]};
+                font-family: 'Fredoka', sans-serif;
+            ">
+                <img src="${photos[i]}" style="width: 147px; height: 110px; object-fit: contain;" />
+                <p style="font-size: 9px; font-style: italic; text-align: center; margin-top: 4px;">
+                    PixieBooth ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                </p>
+                ${selectedSticker === "Girlypop"
+                    ? `<img src="${girlypopSticker}" style="position: absolute; top: 0; left: 0; width: 100%; height: 105%; object-fit: cover; pointer-events: none;" />`
+                    : ""
+                }
+            </div>
+        `;
+
+            const strip = tempDiv.querySelector("#temp-strip");
+
+            const canvas = await html2canvas(strip, {
+                backgroundColor: null,
+                useCORS: true,
+                scale: 2,
+            });
+
+            frames.push(canvas.toDataURL("image/png"));
+            document.body.removeChild(tempDiv);
+        }
+
+        // Use first frame to get GIF size
+        const img = new Image();
+        img.src = frames[0];
+        img.onload = function () {
+            gifshot.createGIF(
+                {
+                    images: frames,
+                    gifWidth: img.width,
+                    gifHeight: img.height,
+                    interval: 1.5,
+                    numFrames: frames.length,
+                },
+                function (obj) {
+                    if (!obj.error) {
+                        const link = document.createElement("a");
+                        link.href = obj.image;
+                        link.download = "PixieBooth-Animated.gif";
+                        link.click();
+                    } else {
+                        alert("❌ Failed to create GIF");
+                    }
+                }
+            );
+        };
+    };
+
+
+
+
+
+
+
+
 
     return (
         <>
             <Navbar />
             <div className="relative min-h-screen bg-white pt-20 px-6 font-['Fredoka'] overflow-x-hidden">
-
-                {/* Decorative Stickers */}
                 <img
                     src={leftSticker}
                     alt="left decor"
@@ -177,7 +703,6 @@ const PhotoStrip = () => {
                 />
 
                 <div className="max-w-6xl mx-auto flex flex-col items-center relative z-10">
-                    {/* Layout Label */}
                     <p className="text-xs border px-4 py-1 border-black mb-2 bg-[#f0dce7]">
                         {layoutText}
                     </p>
@@ -186,40 +711,41 @@ const PhotoStrip = () => {
                         Customize your photo strip
                     </h2>
 
-                    {/* LEFT + RIGHT */}
                     <div className="flex flex-col md:flex-row w-full justify-start">
 
                         {/* LEFT: Photo Strip */}
                         <div className="flex justify-center md:justify-start w-full md:w-auto relative">
-                            <div
-                                className={`
-                  shadow-lg px-4 pt-4 pb-2 overflow-hidden
-                  ${String(layout) === "D"
-                                        ? "w-auto -ml-6 -mt-14"
-                                        : String(layout) === "C"
-                                            ? "w-[210px] mt-2"
-                                            : "w-[210px] -mt-14"}
-                  self-start border-2 relative
-                `}
-                                style={{
-                                    backgroundColor: frameColorHexMap[selectedFrameColor],
-                                    borderColor: frameColorHexMap[selectedFrameColor]
-                                }}
-                            >
-                                {renderLayoutStrip()}
-                                <p className={`text-[9px] text-center mt-2 italic ${timestampTextColor}`}>
-                                    PixieBooth &nbsp; {new Date().toLocaleDateString()} &nbsp;
-                                    {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                                </p>
-
-                                {/* ✅ Sticker */}
-                                {renderStickerPerLayout()}
+                            <div id="printable-strip">
+                                <div
+                                    id="photo-strip-canvas"
+                                    className={`
+                                        shadow-lg px-4 pt-4 pb-2 overflow-hidden relative
+                                        ${String(layout) === "D"
+                                            ? "w-auto -ml-6 -mt-14"
+                                            : String(layout) === "C"
+                                                ? "w-[200px] mt-2"
+                                                : "w-[200px] -mt-14"}
+                                            border-2 self-start
+                            `}
+                                    style={{
+                                        backgroundColor: frameColorHexMap[selectedFrameColor],
+                                        borderColor: frameColorHexMap[selectedFrameColor]
+                                    }}
+                                >
+                                    {renderLayoutStrip()}
+                                    <p className={`text-[9px] text-center mt-2 italic ${timestampTextColor}`}>
+                                        PixieBooth &nbsp; {new Date().toLocaleDateString()} &nbsp;
+                                        {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                                    </p>
+                                    {renderStickerPerLayout()}
+                                </div>
                             </div>
                         </div>
 
                         {/* RIGHT: Controls */}
                         <div className="flex flex-col w-full max-w-lg mt-8 md:mt-0 md:ml-60">
                             <div className="flex flex-col gap-8">
+
                                 {/* Frame Color */}
                                 <div className="w-full">
                                     <h3 className="text-sm font-semibold mb-4 ml-20">Frame Color</h3>
@@ -257,15 +783,31 @@ const PhotoStrip = () => {
 
                                 {/* Action Buttons */}
                                 <div className="flex flex-wrap gap-4">
-                                    <button className="px-4 py-3 text-xs border border-black rounded-full bg-white hover:bg-pink-50 transition">
+                                    <button
+                                        onClick={handleDownloadStrip}
+                                        className="px-4 py-3 text-xs border border-black rounded-full bg-white hover:bg-pink-50 transition"
+                                    >
                                         📄 Download Photo Strip
                                     </button>
                                     <button className="px-4 py-3 text-xs border border-black rounded-full bg-white hover:bg-pink-50 transition">
                                         📲 Download via QR Code
                                     </button>
-                                    <button className="px-4 py-3 text-xs border border-black rounded-full bg-white hover:bg-pink-50 transition">
+                                    <button
+                                        onClick={handleDownloadGIF}
+                                        className="px-4 py-3 text-xs border border-black rounded-full bg-white hover:bg-pink-50 transition"
+                                    >
                                         🎞 Download GIF
                                     </button>
+
+                                    <button
+                                        onClick={() => window.print()}
+                                        className="px-4 py-3 text-xs border border-black rounded-full bg-white hover:bg-pink-50 transition"
+                                    >
+                                        🖨️ Print Photo Strip
+                                    </button>
+
+
+
                                     <button
                                         onClick={() => navigate("/camera")}
                                         className="px-4 py-3 text-xs border border-black rounded-full bg-[#FCD0DA] font-semibold hover:bg-pink-100 transition"

@@ -72,6 +72,25 @@ const CameraCapture = () => {
         });
     };
 
+    const saveImageToGallery = async (imageUrl) => {
+        const token = localStorage.getItem("authToken");
+        if (!token) return;
+
+        try {
+            await fetch("http://localhost:5000/api/gallery/save", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ imageUrl }),
+            });
+        } catch (err) {
+            console.error("Failed to save image:", err);
+        }
+    };
+
+
     const startCapture = async () => {
         if (!videoRef.current) return;
         setCapturedImages([]); // Clear old
@@ -95,6 +114,12 @@ const CameraCapture = () => {
 
                 newImages.push(dataUrl);
                 setCapturedImages((prev) => [...prev, dataUrl]); // live preview
+
+                // ✅ Save to gallery if logged in
+                const token = localStorage.getItem("authToken");
+                if (token) {
+
+                }
             }
 
             await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -123,9 +148,13 @@ const CameraCapture = () => {
                                 <button className="px-4 py-2 rounded-full bg-[#FCD0DA] border border-black font-black text-xs tracking-wider">
                                     CAMERA
                                 </button>
-                                <button className="px-4 py-2 rounded-full bg-white border border-black font-black text-xs tracking-wider">
+                                <button
+                                    onClick={() => navigate("/upload-images", { state: { layout: selectedLayout } })}
+                                    className="px-4 py-2 rounded-full bg-white border border-black font-black text-xs tracking-wider"
+                                >
                                     UPLOAD IMAGES
                                 </button>
+
                             </div>
 
                             <p className="text-xs bg-[#F2E4EC] px-4 py-1 border border-black rounded mb-4">
