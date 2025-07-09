@@ -3,7 +3,7 @@ import About from "./pages/About_page";
 import CameraCapture from "./pages/camera";
 import Contact from "./pages/contact_page";
 import Description from "./pages/description";
-import Home from "./pages/Home";
+import Home from "./pages/home";
 import LayoutSelection from "./pages/LayoutSelection";
 import Login from "./pages/login";
 import PhotoStrip from "./pages/photo_strip";

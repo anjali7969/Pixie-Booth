@@ -8,7 +8,7 @@ import blueFlower from "../assets/images/blue-flower.png";
 import footerWave from "../assets/images/footer.png";
 import leftStar from "../assets/images/left-star.png";
 import pinkFlower from "../assets/images/pink-flower.png";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/navbar";
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -208,9 +208,22 @@ const Profile = () => {
                                                 "👤"
                                             )}
                                         </div>
-                                        <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-pink-400 rounded-full flex items-center justify-center shadow-md">
-                                            <span className="text-white text-xs">✨</span>
+                                        <div
+                                            className="absolute -bottom-2 -right-2 w-6 h-6 bg-pink-400 rounded-full flex items-center justify-center shadow-md cursor-pointer"
+                                            onClick={() => document.getElementById("cameraCaptureInput").click()}
+                                        >
+                                            <span className="text-white text-xs">📷</span>
+                                            <input
+                                                id="cameraCaptureInput"
+                                                type="file"
+                                                accept="image/*"
+                                                capture="user"
+                                                className="hidden"
+                                                onChange={handleImageUpload}
+                                            />
                                         </div>
+
+
                                     </div>
                                     <h2 className="text-center text-lg mt-3 text-gray-800 font-bold truncate">
                                         {user.name || "User Name"}
