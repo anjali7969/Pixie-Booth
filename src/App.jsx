@@ -9,7 +9,7 @@ import Login from "./pages/login";
 import PhotoStrip from "./pages/photo_strip";
 import Profile from "./pages/profile";
 import Signup from "./pages/signup";
-import UploadImages from "./pages/upload_image";
+import UploadImages from "./pages/upload_image"; // Importing the UploadImages component
 
 
 function App() {
