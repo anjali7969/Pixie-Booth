@@ -10,6 +10,7 @@ import leftStar from "../assets/images/left-star.png";
 import pinkFlower from "../assets/images/pink-flower.png";
 import Navbar from "../components/navbar";
 
+// Profile page component
 const Profile = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState({ name: "", email: "", profileImage: "" });
@@ -22,6 +23,7 @@ const Profile = () => {
 
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
+    // Fetch user data and gallery on component mount
     useEffect(() => {
         const userData = JSON.parse(localStorage.getItem("pixiebooth_user"));
         if (userData) {
