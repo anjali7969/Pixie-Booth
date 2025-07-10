@@ -6,8 +6,8 @@ import loginBg from "../assets/images/login.png";
 import logo from "../assets/images/logo.png";
 import tvIcon from "../assets/images/Pink-TV.png";
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify"; // Importing toast for notifications
+import "react-toastify/dist/ReactToastify.css"; // Importing toast styles
 
 const Login = () => {
     const [email, setEmail] = useState("");
