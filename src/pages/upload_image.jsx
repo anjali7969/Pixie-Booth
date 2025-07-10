@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import bottomHeart from "../assets/images/bottom_heart.png";
 import bottomRight from "../assets/images/bottom_right.png";
 import footerWave from "../assets/images/footer.png";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/navbar";
 
 const UploadImages = () => {
     const navigate = useNavigate();

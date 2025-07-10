@@ -9,6 +9,7 @@ import tvIcon from "../assets/images/Pink-TV.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Signup page component
 const Signup = () => {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
