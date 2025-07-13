@@ -8,7 +8,7 @@ const Description = () => {
     return (
         <>
             <Navbar />
-            <div className="flex flex-col min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 font-['Fredoka'] relative overflow-hidden">
+            <div className="flex flex-col min-h-screen bg-gradient-to-br from-pink-10 via-white to-purple-10 font-['Fredoka'] relative overflow-hidden">
                 {/* Decorative Background Elements */}
                 <div className="absolute top-20 left-10 w-24 h-24 bg-pink-200 rounded-full opacity-20 animate-pulse"></div>
                 <div className="absolute top-40 right-16 w-16 h-16 bg-purple-200 rounded-full opacity-25 animate-bounce"></div>

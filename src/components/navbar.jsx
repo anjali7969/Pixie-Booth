@@ -80,7 +80,7 @@ const Navbar = () => {
                             </Link>
                             <Link to="/signup">
                                 <button
-                                    className="px-5 py-2 text-sm font-bold tracking-wider border border-black bg-[#FCD0DA] hover:scale-105 transition"
+                                    className="px-5 py-2 text-sm font-bold tracking-wider border border-black bg-[#ffffff] hover:scale-105 transition"
                                     style={{ fontFamily: 'Fredoka, sans-serif' }}
                                 >
                                     SIGN UP
